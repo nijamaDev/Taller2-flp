@@ -58,3 +58,37 @@
 
 (define just-scan
   (sllgen:make-string-scanner lexica gramatica))
+
+(define unparse-op
+  (lambda (op)
+    (cases operacion op
+      (primitiva-sum () '+)
+      (primitiva-res () '-)
+      (primitiva-mul () '*)
+      (primitiva-div () '/)
+      )
+    )
+  )
+
+(define unparse-exp
+  (lambda (exp)
+    (cases expresion exp
+      (num-lit (n) n)
+      (exp-lit  (exp1 op exp2)
+                (list
+                 (unparse-exp exp1)
+                 (unparse-op op)
+                 (unparse-exp exp2)))
+      (variable (id) id)
+      (declaracion (ids exps cuerpo) (list ids (car (unparse-exp exps)) (unparse-exp cuerpo)))
+      )
+    )
+  )
+
+(define unparse
+  (lambda (exp)
+    (cases programa exp
+      (un-program (expresion) (unparse-exp expresion))
+      )
+    )
+  )
