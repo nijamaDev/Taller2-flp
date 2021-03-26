@@ -77,13 +77,19 @@
     )
   )
 
-(define diff-tree-plus
+(define diff-check-val ;returns the decimal value of the represented diff-tree
   (lambda (l)
     (cond
       [(diff-one? l) 1]
       [(diff-zero? l) 0]
       [(diff-negOne? l) -1]
-      [else (- (diff-tree-plus (cadr l)) (diff-tree-plus (caddr l)))]
+      [else (- (diff-check-val (cadr l)) (diff-check-val (caddr l)))]
       )
+    )
+  )
+
+(define diff-tree-plus
+  (lambda (t1 t2)
+    (list 'diff t1 (list 'diff (diff-zero) t2))
     )
   )
